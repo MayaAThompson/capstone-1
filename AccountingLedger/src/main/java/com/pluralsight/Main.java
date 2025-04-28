@@ -7,11 +7,11 @@ public class Main {
         while (true) {
             char homeScreenSelection = getHomeScreenSelection();
             if (homeScreenSelection == 'D') {
-               Transaction.credit();
+               Transaction.newCredit();
 //               Utils.pauseReturn();
             }
             if (homeScreenSelection == 'P') {
-                Transaction.debit();
+                Transaction.newDebit();
 //                Utils.pauseReturn();
             }
             if (homeScreenSelection =='L') {

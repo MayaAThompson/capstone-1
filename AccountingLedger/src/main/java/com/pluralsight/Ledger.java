@@ -12,11 +12,13 @@ public class Ledger {
 
     public static void ledgerMenu() {
 
-        char ledgerScreenSelection = getLedgerScreenSelection();
+
         while(true) {
+            char ledgerScreenSelection = getLedgerScreenSelection();
             if (ledgerScreenSelection == 'A') {
                 viewAllTransactions();
                 Utils.pauseReturn();
+                continue;
             }
             if (ledgerScreenSelection == 'D') {
                 viewCredits();
@@ -64,9 +66,10 @@ public class Ledger {
                     continue;
                 }
 
-                transactions.add(new Transaction(parts[0], parts[1], parts[2], parts[3], Integer.parseInt(parts[4])));
+                transactions.add(new Transaction(parts[0], parts[1], parts[2], parts[3], Double.parseDouble(parts[4])));
 
             }
+            reader.close();
 
         } catch (FileNotFoundException e) {
             System.out.println("File not found. " + e.getMessage());
@@ -81,6 +84,23 @@ public class Ledger {
             String transaction = loadLedger().get(i).toString();
             System.out.println(transaction);
         }
+    }
+
+    public static String readExistingLedger() {
+        StringBuilder existingLedger = new StringBuilder();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            String input;
+            while ((input = reader.readLine()) != null) {
+                existingLedger.append(input).append("\n");
+            }
+
+        } catch (FileNotFoundException e) {
+        System.out.println("File not found. " + e.getMessage());
+        } catch (IOException e) {
+        System.out.println("Failed to read the file. " + e.getMessage());
+        }
+        return existingLedger.toString();
     }
     
     
