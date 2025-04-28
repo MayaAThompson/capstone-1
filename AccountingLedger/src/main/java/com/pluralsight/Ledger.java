@@ -12,36 +12,18 @@ public class Ledger {
 
     public static void ledgerMenu() {
 
-
-        while(true) {
+        boolean keepLedgerRunning = true;
+        while(keepLedgerRunning) {
             char ledgerScreenSelection = getLedgerScreenSelection();
-            if (ledgerScreenSelection == 'A') {
-                viewAllTransactions();
-                Utils.pauseReturn();
-                continue;
-            }
-            if (ledgerScreenSelection == 'D') {
-                viewCredits();
-                Utils.pauseReturn();
-            }
-            if (ledgerScreenSelection == 'P') {
-                viewDebits();
-                Utils.pauseReturn();
-            }
-            if (ledgerScreenSelection == 'R') {
-                reportsMenu();
-                Utils.pauseReturn();
-            }
-            if (ledgerScreenSelection == 'H') {
-                break;
-            }
-            else {
-                System.out.println("Please enter a valid selection.");
+            switch (ledgerScreenSelection) {
+                case 'A' -> viewAllTransactions();
+                case 'D' -> viewCredits();
+                case 'P' -> viewDebits();
+                case 'R' -> Reports.reportsMenu();
+                case 'H' -> keepLedgerRunning = false;
+                default -> System.out.println("Please select a valid option.");
             }
         }
-    }
-
-    private static void reportsMenu() {
     }
 
     private static void viewDebits() {
@@ -102,6 +84,4 @@ public class Ledger {
         }
         return existingLedger.toString();
     }
-    
-    
 }

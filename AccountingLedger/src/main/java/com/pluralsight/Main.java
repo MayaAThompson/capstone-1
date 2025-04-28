@@ -4,26 +4,15 @@ public class Main {
 
     public static void main(String[] args) {
 
-        while (true) {
+        boolean keepMainMenuRunning = true;
+        while (keepMainMenuRunning) {
             char homeScreenSelection = getHomeScreenSelection();
-            if (homeScreenSelection == 'D') {
-               Transaction.newCredit();
-//               Utils.pauseReturn();
-            }
-            if (homeScreenSelection == 'P') {
-                Transaction.newDebit();
-//                Utils.pauseReturn();
-            }
-            if (homeScreenSelection =='L') {
-                Ledger.ledgerMenu();
-//                Utils.pauseReturn();
-            }
-            if (homeScreenSelection == 'X') {
-                break;
-            }
-            else {
-                System.out.println("Please enter a valid selection.");
-//                Utils.pauseReturn();
+            switch (homeScreenSelection) {
+                case 'D' -> Transaction.newCredit();
+                case 'P' -> Transaction.newDebit();
+                case 'L' -> Ledger.ledgerMenu();
+                case 'X' -> keepMainMenuRunning = false;
+                default -> System.out.println("Please select a valid option.");
             }
         }
     }
