@@ -27,9 +27,35 @@ public class Ledger {
     }
 
     private static void viewDebits() {
+        StringBuilder debits = new StringBuilder();
+        for(Transaction transaction : Ledger.loadLedger()) {
+            double debit = transaction.getAmount();
+            if(debit < 0 ) {
+                debits.append(transaction).append("\n");
+            }
+        }
+        if (debits.toString().isEmpty()) {
+            System.out.println("No records available.");
+        }
+        else {
+            System.out.println(debits);
+        }
     }
 
     private static void viewCredits() {
+        StringBuilder credits = new StringBuilder();
+        for(Transaction transaction : Ledger.loadLedger()) {
+            double credit = transaction.getAmount();
+            if(credit > 0 ) {
+                credits.append(transaction).append("\n");
+            }
+        }
+        if (credits.toString().isEmpty()) {
+            System.out.println("No records available.");
+        }
+        else {
+            System.out.println(credits);
+        }
     }
 
     private static char getLedgerScreenSelection() {

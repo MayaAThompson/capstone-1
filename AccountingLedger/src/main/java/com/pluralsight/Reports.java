@@ -59,9 +59,37 @@ public class Reports {
     }
 
     private static void viewYearToDate() {
+        StringBuilder yearToDate = new StringBuilder();
+        for(Transaction transaction : Ledger.loadLedger()) {
+            String[] splitDate = transaction.getDate().split("-");
+            int year = Integer.parseInt(splitDate[0]);
+            if(year == currentYear) {
+                yearToDate.append(transaction).append("\n");
+            }
+        }
+        if (yearToDate.toString().isEmpty()) {
+            System.out.println("No records available.");
+        }
+        else {
+            System.out.println(yearToDate);
+        }
     }
 
     private static void viewPreviousYear() {
+        StringBuilder previousYear = new StringBuilder();
+        for(Transaction transaction : Ledger.loadLedger()) {
+            String[] splitDate = transaction.getDate().split("-");
+            int year = Integer.parseInt(splitDate[0]);
+            if(year == currentYear - 1) {
+                previousYear.append(transaction).append("\n");
+            }
+        }
+        if (previousYear.toString().isEmpty()) {
+            System.out.println("No records available.");
+        }
+        else {
+            System.out.println(previousYear);
+        }
     }
 
     private static void searchByVendor() {
