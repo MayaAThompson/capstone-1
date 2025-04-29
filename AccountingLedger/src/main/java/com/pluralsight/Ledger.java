@@ -17,8 +17,8 @@ public class Ledger {
             char ledgerScreenSelection = getLedgerScreenSelection();
             switch (ledgerScreenSelection) {
                 case 'A' -> viewAllTransactions();
-                case 'D' -> viewCredits();
-                case 'P' -> viewDebits();
+                case 'D' -> viewDeposits();
+                case 'P' -> viewPayments();
                 case 'R' -> Reports.reportsMenu();
                 case 'H' -> keepLedgerRunning = false;
                 default -> System.out.println("Please select a valid option.");
@@ -26,35 +26,37 @@ public class Ledger {
         }
     }
 
-    private static void viewDebits() {
-        StringBuilder debits = new StringBuilder();
-        for(Transaction transaction : Ledger.loadLedger()) {
-            double debit = transaction.getAmount();
+    private static void viewPayments() {
+        StringBuilder payments = new StringBuilder();
+        ArrayList<Transaction> transaction = loadLedger();
+        for(int i = loadLedger().size() - 1; i >= 0; i--) {
+            double debit = transaction.get(i).getAmount();
             if(debit < 0 ) {
-                debits.append(transaction).append("\n");
+                payments.append(transaction.get(i)).append("\n");
             }
         }
-        if (debits.toString().isEmpty()) {
+        if (payments.toString().isEmpty()) {
             System.out.println("No records available.");
         }
         else {
-            System.out.println(debits);
+            System.out.println(payments);
         }
     }
 
-    private static void viewCredits() {
-        StringBuilder credits = new StringBuilder();
-        for(Transaction transaction : Ledger.loadLedger()) {
-            double credit = transaction.getAmount();
+    private static void viewDeposits() {
+        StringBuilder deposits = new StringBuilder();
+        ArrayList<Transaction> transaction = loadLedger();
+        for(int i = loadLedger().size() - 1; i >= 0; i--) {
+            double credit = transaction.get(i).getAmount();
             if(credit > 0 ) {
-                credits.append(transaction).append("\n");
+                deposits.append(transaction.get(i)).append("\n");
             }
         }
-        if (credits.toString().isEmpty()) {
+        if (deposits.toString().isEmpty()) {
             System.out.println("No records available.");
         }
         else {
-            System.out.println(credits);
+            System.out.println(deposits);
         }
     }
 

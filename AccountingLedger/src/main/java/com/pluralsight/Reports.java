@@ -1,6 +1,7 @@
 package com.pluralsight;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Reports {
     private static LocalDate date = LocalDate.now();
@@ -13,10 +14,10 @@ public class Reports {
         while(keepReportsRunning) {
             int reportsScreenSelection = getReportsScreenSelection();
             switch (reportsScreenSelection) {
-                case 1 -> viewMonthToDate();
-                case 2 -> viewPreviousMonth();
-                case 3 -> viewYearToDate();
-                case 4 -> viewPreviousYear();
+                case 1 -> viewMonthReport(true); //month to date
+                case 2 -> viewMonthReport(false); //previous month
+                case 3 -> viewYearReport(true); //year to date
+                case 4 -> viewYearReport(false); //previous year
                 case 5 -> searchByVendor();
                 case 0 -> keepReportsRunning = false;
                 default -> System.out.println("Please select a valid option.");
@@ -24,73 +25,89 @@ public class Reports {
         }
     }
 
-    private static void viewMonthToDate() {
-        StringBuilder monthToDate = new StringBuilder();
-        for(Transaction transaction : Ledger.loadLedger()) {
-            String[] splitDate = transaction.getDate().split("-");
+    private static void viewMonthReport(boolean thisMonth) {
+        StringBuilder monthTransactions = new StringBuilder();
+        ArrayList<Transaction> transaction = Ledger.loadLedger();
+        for(int i = Ledger.loadLedger().size() - 1; i >= 0; i--) {
+            String[] splitDate = transaction.get(i).getDate().split("-");
             int month = Integer.parseInt(splitDate[1]);
-            if(month == currentMonth) {
-                monthToDate.append(transaction).append("\n");
+            if(thisMonth) {
+                if (month == currentMonth) {
+                    monthTransactions.append(transaction.get(i)).append("\n");
+                }
+            }
+            if(!thisMonth) {
+                if(month == currentMonth - 1 || currentMonth == 1 && month == 12) {
+                    monthTransactions.append(transaction.get(i)).append("\n");
+                }
             }
         }
-        if (monthToDate.toString().isEmpty()) {
+        if (monthTransactions.toString().isEmpty()) {
             System.out.println("No records available.");
         }
         else {
-            System.out.println(monthToDate);
+            System.out.println(monthTransactions);
         }
     }
 
-    private static void viewPreviousMonth() {
-        StringBuilder previousMonth = new StringBuilder();
-        for(Transaction transaction : Ledger.loadLedger()) {
-            String[] splitDate = transaction.getDate().split("-");
-            int month = Integer.parseInt(splitDate[1]);
-            if(month == currentMonth - 1 || currentMonth == 1 && month == 12) {
-                previousMonth.append(transaction).append("\n");
-            }
-        }
-        if (previousMonth.toString().isEmpty()) {
-            System.out.println("No records available.");
-        }
-        else {
-            System.out.println(previousMonth);
-        }
-    }
+//    private static void viewPreviousMonth() {
+//        StringBuilder previousMonth = new StringBuilder();
+//        for(Transaction transaction : Ledger.loadLedger()) {
+//            String[] splitDate = transaction.getDate().split("-");
+//            int month = Integer.parseInt(splitDate[1]);
+//            if(month == currentMonth - 1 || currentMonth == 1 && month == 12) {
+//                previousMonth.append(transaction).append("\n");
+//            }
+//        }
+//        if (previousMonth.toString().isEmpty()) {
+//            System.out.println("No records available.");
+//        }
+//        else {
+//            System.out.println(previousMonth);
+//        }
+//    }
 
-    private static void viewYearToDate() {
-        StringBuilder yearToDate = new StringBuilder();
-        for(Transaction transaction : Ledger.loadLedger()) {
-            String[] splitDate = transaction.getDate().split("-");
+    private static void viewYearReport(boolean thisYear) {
+        StringBuilder yearTransactions = new StringBuilder();
+        ArrayList<Transaction> transaction = Ledger.loadLedger();
+        for(int i = Ledger.loadLedger().size() - 1; i >= 0; i--) {
+            String[] splitDate = transaction.get(i).getDate().split("-");
             int year = Integer.parseInt(splitDate[0]);
-            if(year == currentYear) {
-                yearToDate.append(transaction).append("\n");
+            if(thisYear) {
+                if (year == currentYear) {
+                    yearTransactions.append(transaction.get(i)).append("\n");
+                }
+            }
+            if(!thisYear) {
+                if(year == currentYear - 1) {
+                    yearTransactions.append(transaction.get(i)).append("\n");
+                }
             }
         }
-        if (yearToDate.toString().isEmpty()) {
+        if (yearTransactions.toString().isEmpty()) {
             System.out.println("No records available.");
         }
         else {
-            System.out.println(yearToDate);
+            System.out.println(yearTransactions);
         }
     }
 
-    private static void viewPreviousYear() {
-        StringBuilder previousYear = new StringBuilder();
-        for(Transaction transaction : Ledger.loadLedger()) {
-            String[] splitDate = transaction.getDate().split("-");
-            int year = Integer.parseInt(splitDate[0]);
-            if(year == currentYear - 1) {
-                previousYear.append(transaction).append("\n");
-            }
-        }
-        if (previousYear.toString().isEmpty()) {
-            System.out.println("No records available.");
-        }
-        else {
-            System.out.println(previousYear);
-        }
-    }
+//    private static void viewPreviousYear() {
+//        StringBuilder previousYear = new StringBuilder();
+//        for(Transaction transaction : Ledger.loadLedger()) {
+//            String[] splitDate = transaction.getDate().split("-");
+//            int year = Integer.parseInt(splitDate[0]);
+//            if(year == currentYear - 1) {
+//                previousYear.append(transaction).append("\n");
+//            }
+//        }
+//        if (previousYear.toString().isEmpty()) {
+//            System.out.println("No records available.");
+//        }
+//        else {
+//            System.out.println(previousYear);
+//        }
+//    }
 
     private static void searchByVendor() {
     }
