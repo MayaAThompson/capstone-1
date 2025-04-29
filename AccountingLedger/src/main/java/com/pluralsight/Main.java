@@ -24,7 +24,12 @@ public class Main {
     }
 
     private static char getHomeScreenSelection() {
-        System.out.println("--HOME--\nD) Add Deposit\nP) Make Payment (Debit)\nL) Ledger\nX) Exit");
-        return Utils.messageAndResponse("Select: ").toUpperCase().charAt(0);
+        System.out.println("\n---HOME---\nD) Add Deposit\nP) Make Payment (Debit)\nL) Ledger\nX) Exit");
+        try {
+            return Utils.messageAndResponse("Select: ").toUpperCase().charAt(0);
+        } catch (Exception e) {
+            System.out.println("\nSomething went wrong! " + e.getMessage());
+        }
+        return ' ';
     }
 }

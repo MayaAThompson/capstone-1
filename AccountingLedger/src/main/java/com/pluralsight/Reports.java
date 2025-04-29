@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Reports {
     private static final LocalDate date = LocalDate.now();
     private static final int currentYear = date.getYear();
-    private static final int currentMonth = 1; //date.getMonthValue();
+    private static final int currentMonth = date.getMonthValue();
 
     public static void reportsMenu() {
 
@@ -26,8 +26,13 @@ public class Reports {
     }
 
     private static int getReportsScreenSelection() {
-        System.out.println("--Reports--\n1) Month to Date\n2) Previous Month\n3) Year to Date\n4) Previous Year\n5) Search by Vendor\n0) Back");
-        return Integer.parseInt(Utils.messageAndResponse("Select: "));
+        System.out.println("\n---Reports---\n1) Month to Date\n2) Previous Month\n3) Year to Date\n4) Previous Year\n5) Search by Vendor\n0) Back");
+        try {
+            return Integer.parseInt(Utils.messageAndResponse("Select: "));
+        } catch (NumberFormatException e) {
+            System.out.println("\nSomething went wrong! " + e.getMessage());
+        }
+        return 999;
     }
 
     // view reports for one month
@@ -55,8 +60,9 @@ public class Reports {
             System.out.println("No records available.");
         }
         else {
-            System.out.println(monthTransactions);
+            System.out.println("\n" + monthTransactions);
         }
+        Utils.pauseReturn();
     }
 
     //view transactions for one year
@@ -83,8 +89,9 @@ public class Reports {
             System.out.println("No records available.");
         }
         else {
-            System.out.println(yearTransactions);
+            System.out.println("\n" + yearTransactions);
         }
+        Utils.pauseReturn();
     }
 
     // prompts user for a vendor search term and displays transactions from that vendor (if any)
@@ -104,7 +111,8 @@ public class Reports {
             System.out.println("No records available.");
         }
         else {
-            System.out.println(searchTransactions);
+            System.out.println("\n" + searchTransactions);
         }
+        Utils.pauseReturn();
     }
 }

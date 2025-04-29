@@ -16,6 +16,9 @@ public class Utils {
     //a way to add a pause also adds one line of whitespace in console. continues on "Enter" key press
     public static void pauseReturn() {
         System.out.print("Press Enter to Continue");
+        if (scanner.hasNextLine()) {
+            scanner.nextLine();
+        }
         scanner.nextLine();
     }
 }

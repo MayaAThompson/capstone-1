@@ -27,8 +27,13 @@ public class Ledger {
     }
 
     private static char getLedgerScreenSelection() {
-        System.out.println("--Ledger--\nA) All\nD) Deposits\nP) Payments\nR) Reports\nH) Home");
-        return Utils.messageAndResponse("Select: ").toUpperCase().charAt(0);
+        System.out.println("\n---Ledger---\nA) All\nD) Deposits\nP) Payments\nR) Reports\nH) Home");
+        try {
+            return Utils.messageAndResponse("Select: ").toUpperCase().charAt(0);
+        } catch (Exception e) {
+            System.out.println("\nSomething went wrong! " + e.getMessage());
+        }
+        return ' ';
     }
 
     // false will print to console all deposits true prints all payments to console
@@ -53,8 +58,9 @@ public class Ledger {
             System.out.println("No records available.");
         }
         else {
-            System.out.println(transactions);
+            System.out.println("\n" + transactions);
         }
+        Utils.pauseReturn();
     }
 
     //loads the current contents of filePath to an ArrayList<>
@@ -82,10 +88,12 @@ public class Ledger {
     //prints all transactions in the ledger to the console
 
     public static void viewAllTransactions() {
+        System.out.println(); //only purpose is whitespace in CLI
         for (int i = loadLedger().size() - 1; i >= 0; i--) {
-            String transaction = loadLedger().get(i).toString();
-            System.out.println(transaction);
+            String transactions = loadLedger().get(i).toString();
+            System.out.println(transactions);
         }
+        Utils.pauseReturn();
     }
 
     //reads the current ledger and stores it in a string
