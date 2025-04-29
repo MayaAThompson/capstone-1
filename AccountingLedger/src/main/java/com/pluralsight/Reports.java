@@ -50,23 +50,6 @@ public class Reports {
         }
     }
 
-//    private static void viewPreviousMonth() {
-//        StringBuilder previousMonth = new StringBuilder();
-//        for(Transaction transaction : Ledger.loadLedger()) {
-//            String[] splitDate = transaction.getDate().split("-");
-//            int month = Integer.parseInt(splitDate[1]);
-//            if(month == currentMonth - 1 || currentMonth == 1 && month == 12) {
-//                previousMonth.append(transaction).append("\n");
-//            }
-//        }
-//        if (previousMonth.toString().isEmpty()) {
-//            System.out.println("No records available.");
-//        }
-//        else {
-//            System.out.println(previousMonth);
-//        }
-//    }
-
     private static void viewYearReport(boolean thisYear) {
         StringBuilder yearTransactions = new StringBuilder();
         ArrayList<Transaction> transaction = Ledger.loadLedger();
@@ -92,24 +75,23 @@ public class Reports {
         }
     }
 
-//    private static void viewPreviousYear() {
-//        StringBuilder previousYear = new StringBuilder();
-//        for(Transaction transaction : Ledger.loadLedger()) {
-//            String[] splitDate = transaction.getDate().split("-");
-//            int year = Integer.parseInt(splitDate[0]);
-//            if(year == currentYear - 1) {
-//                previousYear.append(transaction).append("\n");
-//            }
-//        }
-//        if (previousYear.toString().isEmpty()) {
-//            System.out.println("No records available.");
-//        }
-//        else {
-//            System.out.println(previousYear);
-//        }
-//    }
-
     private static void searchByVendor() {
+        StringBuilder searchTransactions = new StringBuilder();
+        ArrayList<Transaction> transaction = Ledger.loadLedger();
+        String searchTerm = Utils.messageAndResponse("Search: ").trim();
+        String ledgerVendor;
+        for(int i = Ledger.loadLedger().size() - 1; i >= 0; i--) {
+            ledgerVendor = transaction.get(i).getVendor();
+            if(searchTerm.equalsIgnoreCase(ledgerVendor)) {
+                searchTransactions.append(transaction.get(i)).append("\n");
+            }
+        }
+        if (searchTransactions.toString().isEmpty()) {
+            System.out.println("No records available.");
+        }
+        else {
+            System.out.println(searchTransactions);
+        }
     }
 
     private static int getReportsScreenSelection() {

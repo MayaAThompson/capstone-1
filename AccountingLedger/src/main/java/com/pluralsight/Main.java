@@ -3,15 +3,15 @@ package com.pluralsight;
 public class Main {
 
     public static void main(String[] args) {
-
+// Main menu
         boolean keepMainMenuRunning = true;
         while (keepMainMenuRunning) {
             char homeScreenSelection = getHomeScreenSelection();
             switch (homeScreenSelection) {
-                case 'D' -> Transaction.newCredit();
-                case 'P' -> Transaction.newDebit();
-                case 'L' -> Ledger.ledgerMenu();
-                case 'X' -> keepMainMenuRunning = false;
+                case 'D' -> Transaction.newTransaction(true); // adds a deposit to the account
+                case 'P' -> Transaction.newTransaction(false); // adds a payment to the account
+                case 'L' -> Ledger.ledgerMenu(); // redirects to the ledger menu
+                case 'X' -> keepMainMenuRunning = false; //closes the program
                 default -> System.out.println("Please select a valid option.");
             }
         }

@@ -23,44 +23,29 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public static void newCredit() {
-        try {
+    // reads the current transactions and stores them in a buffer (String) then prompts the user for their transaction information
+    //once input is received the new transaction is tagged automatically with date and time and all transactions are written to the filePath
+
+    public static void newTransaction(boolean isDeposit) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(Ledger.filePath))) {
             String existingLedger = Ledger.readExistingLedger();
-            BufferedWriter writer = new BufferedWriter(new FileWriter(Ledger.filePath));
             StringBuilder newCredit = new StringBuilder();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
             newCredit.append(LocalDate.now()).append("|");
             newCredit.append(LocalTime.now().format(formatter)).append("|");
-            newCredit.append(Utils.messageAndResponse("Deposit description: ")).append("|");
-            newCredit.append(Utils.messageAndResponse("Vendor: ")).append("|");
-            newCredit.append(Utils.messageAndResponse("Amount: $"));
+            newCredit.append(Utils.messageAndResponse("Transaction description: ").trim()).append("|");
+            newCredit.append(Utils.messageAndResponse("Vendor: ").trim()).append("|");
 
+            if(isDeposit) {
+                newCredit.append(Utils.messageAndResponse("Amount: $").trim());
+            }
+
+            if(!isDeposit) {
+                newCredit.append("-").append(Utils.messageAndResponse("Amount: $").trim());
+            }
             writer.write(existingLedger);
             writer.write(newCredit.toString());
-            writer.close();
-
-        } catch (IOException e) {
-            System.out.println("Something went wrong." + e.getMessage());
-        }
-    }
-
-    public static void newDebit() {
-        try {
-            String existingLedger = Ledger.readExistingLedger();
-            BufferedWriter writer = new BufferedWriter(new FileWriter(Ledger.filePath));
-            StringBuilder newCredit = new StringBuilder();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-
-            newCredit.append(LocalDate.now()).append("|");
-            newCredit.append(LocalTime.now().format(formatter)).append("|");
-            newCredit.append(Utils.messageAndResponse("Payment description: ")).append("|");
-            newCredit.append(Utils.messageAndResponse("Vendor: ")).append("|");
-            newCredit.append("-").append(Utils.messageAndResponse("Amount: $"));
-
-            writer.write(existingLedger);
-            writer.write(newCredit.toString());
-            writer.close();
 
         } catch (IOException e) {
             System.out.println("Something went wrong." + e.getMessage());

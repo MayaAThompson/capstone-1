@@ -17,8 +17,8 @@ public class Ledger {
             char ledgerScreenSelection = getLedgerScreenSelection();
             switch (ledgerScreenSelection) {
                 case 'A' -> viewAllTransactions();
-                case 'D' -> viewDeposits();
-                case 'P' -> viewPayments();
+                case 'D' -> viewPaymentsDeposits(false);
+                case 'P' -> viewPaymentsDeposits(true);
                 case 'R' -> Reports.reportsMenu();
                 case 'H' -> keepLedgerRunning = false;
                 default -> System.out.println("Please select a valid option.");
@@ -26,37 +26,27 @@ public class Ledger {
         }
     }
 
-    private static void viewPayments() {
-        StringBuilder payments = new StringBuilder();
+    private static void viewPaymentsDeposits(boolean isPayment) {
+        StringBuilder transactions = new StringBuilder();
         ArrayList<Transaction> transaction = loadLedger();
         for(int i = loadLedger().size() - 1; i >= 0; i--) {
-            double debit = transaction.get(i).getAmount();
-            if(debit < 0 ) {
-                payments.append(transaction.get(i)).append("\n");
+            double paymentDeposit = transaction.get(i).getAmount();
+            if(isPayment) {
+                if (paymentDeposit < 0) {
+                    transactions.append(transaction.get(i)).append("\n");
+                }
+            }
+            if(!isPayment) {
+                if(paymentDeposit > 0 ) {
+                    transactions.append(transaction.get(i)).append("\n");
+                }
             }
         }
-        if (payments.toString().isEmpty()) {
+        if (transactions.toString().isEmpty()) {
             System.out.println("No records available.");
         }
         else {
-            System.out.println(payments);
-        }
-    }
-
-    private static void viewDeposits() {
-        StringBuilder deposits = new StringBuilder();
-        ArrayList<Transaction> transaction = loadLedger();
-        for(int i = loadLedger().size() - 1; i >= 0; i--) {
-            double credit = transaction.get(i).getAmount();
-            if(credit > 0 ) {
-                deposits.append(transaction.get(i)).append("\n");
-            }
-        }
-        if (deposits.toString().isEmpty()) {
-            System.out.println("No records available.");
-        }
-        else {
-            System.out.println(deposits);
+            System.out.println(transactions);
         }
     }
 
@@ -75,9 +65,7 @@ public class Ledger {
                 if (parts[0].equals("date")){
                     continue;
                 }
-
                 transactions.add(new Transaction(parts[0], parts[1], parts[2], parts[3], Double.parseDouble(parts[4])));
-
             }
             reader.close();
 
