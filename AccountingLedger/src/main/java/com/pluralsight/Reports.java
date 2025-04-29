@@ -4,9 +4,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Reports {
-    private static LocalDate date = LocalDate.now();
-    private static int currentYear = date.getYear();
-    private static int currentMonth = date.getMonthValue();
+    private static final LocalDate date = LocalDate.now();
+    private static final int currentYear = date.getYear();
+    private static final int currentMonth = 1; //date.getMonthValue();
 
     public static void reportsMenu() {
 
@@ -18,12 +18,20 @@ public class Reports {
                 case 2 -> viewMonthReport(false); //previous month
                 case 3 -> viewYearReport(true); //year to date
                 case 4 -> viewYearReport(false); //previous year
-                case 5 -> searchByVendor();
-                case 0 -> keepReportsRunning = false;
+                case 5 -> searchByVendor(); //search through records by vendor name
+                case 0 -> keepReportsRunning = false; //returns to ledger menu
                 default -> System.out.println("Please select a valid option.");
             }
         }
     }
+
+    private static int getReportsScreenSelection() {
+        System.out.println("--Reports--\n1) Month to Date\n2) Previous Month\n3) Year to Date\n4) Previous Year\n5) Search by Vendor\n0) Back");
+        return Integer.parseInt(Utils.messageAndResponse("Select: "));
+    }
+
+    // view reports for one month
+    //either the current month (true) or the previous month (false)
 
     private static void viewMonthReport(boolean thisMonth) {
         StringBuilder monthTransactions = new StringBuilder();
@@ -31,13 +39,14 @@ public class Reports {
         for(int i = Ledger.loadLedger().size() - 1; i >= 0; i--) {
             String[] splitDate = transaction.get(i).getDate().split("-");
             int month = Integer.parseInt(splitDate[1]);
+            int year = Integer.parseInt(splitDate[0]);
             if(thisMonth) {
-                if (month == currentMonth) {
+                if (month == currentMonth && year == currentYear) {
                     monthTransactions.append(transaction.get(i)).append("\n");
                 }
             }
             if(!thisMonth) {
-                if(month == currentMonth - 1 || currentMonth == 1 && month == 12) {
+                if((month == currentMonth - 1 && year == currentYear) || (currentMonth == 1 && month == 12 && year == currentYear - 1)) {
                     monthTransactions.append(transaction.get(i)).append("\n");
                 }
             }
@@ -49,6 +58,9 @@ public class Reports {
             System.out.println(monthTransactions);
         }
     }
+
+    //view transactions for one year
+    //either the current year (true) or the previous year (false)
 
     private static void viewYearReport(boolean thisYear) {
         StringBuilder yearTransactions = new StringBuilder();
@@ -75,14 +87,16 @@ public class Reports {
         }
     }
 
+    // prompts user for a vendor search term and displays transactions from that vendor (if any)
+
     private static void searchByVendor() {
         StringBuilder searchTransactions = new StringBuilder();
         ArrayList<Transaction> transaction = Ledger.loadLedger();
-        String searchTerm = Utils.messageAndResponse("Search: ").trim();
+        String searchTerm = Utils.messageAndResponse("Search: ").trim().toLowerCase();
         String ledgerVendor;
         for(int i = Ledger.loadLedger().size() - 1; i >= 0; i--) {
-            ledgerVendor = transaction.get(i).getVendor();
-            if(searchTerm.equalsIgnoreCase(ledgerVendor)) {
+            ledgerVendor = transaction.get(i).getVendor().toLowerCase();
+            if(ledgerVendor.contains(searchTerm)) {
                 searchTransactions.append(transaction.get(i)).append("\n");
             }
         }
@@ -92,10 +106,5 @@ public class Reports {
         else {
             System.out.println(searchTransactions);
         }
-    }
-
-    private static int getReportsScreenSelection() {
-        System.out.println("--Reports--\n1) Month to Date\n2) Previous Month\n3) Year to Date\n4) Previous Year\n5) Search by Vendor\n0) Back");
-        return Integer.parseInt(Utils.messageAndResponse("Select: "));
     }
 }

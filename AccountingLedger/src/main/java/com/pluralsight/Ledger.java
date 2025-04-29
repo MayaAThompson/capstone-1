@@ -17,14 +17,21 @@ public class Ledger {
             char ledgerScreenSelection = getLedgerScreenSelection();
             switch (ledgerScreenSelection) {
                 case 'A' -> viewAllTransactions();
-                case 'D' -> viewPaymentsDeposits(false);
-                case 'P' -> viewPaymentsDeposits(true);
-                case 'R' -> Reports.reportsMenu();
-                case 'H' -> keepLedgerRunning = false;
+                case 'D' -> viewPaymentsDeposits(false); //view deposits
+                case 'P' -> viewPaymentsDeposits(true); //view payments
+                case 'R' -> Reports.reportsMenu(); //go to reports menu
+                case 'H' -> keepLedgerRunning = false; //return to home screen menu
                 default -> System.out.println("Please select a valid option.");
             }
         }
     }
+
+    private static char getLedgerScreenSelection() {
+        System.out.println("--Ledger--\nA) All\nD) Deposits\nP) Payments\nR) Reports\nH) Home");
+        return Utils.messageAndResponse("Select: ").toUpperCase().charAt(0);
+    }
+
+    // false will print to console all deposits true prints all payments to console
 
     private static void viewPaymentsDeposits(boolean isPayment) {
         StringBuilder transactions = new StringBuilder();
@@ -50,15 +57,11 @@ public class Ledger {
         }
     }
 
-    private static char getLedgerScreenSelection() {
-        System.out.println("--Ledger--\nA) All\nD) Deposits\nP) Payments\nR) Reports\nH) Home");
-        return Utils.messageAndResponse("Select: ").toUpperCase().charAt(0);
-    }
+    //loads the current contents of filePath to an ArrayList<>
 
     public static ArrayList<Transaction> loadLedger() {
         ArrayList<Transaction> transactions = new ArrayList<>();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String input;
             while ((input = reader.readLine()) != null) {
                 String[] parts = input.split("\\|");
@@ -67,7 +70,6 @@ public class Ledger {
                 }
                 transactions.add(new Transaction(parts[0], parts[1], parts[2], parts[3], Double.parseDouble(parts[4])));
             }
-            reader.close();
 
         } catch (FileNotFoundException e) {
             System.out.println("File not found. " + e.getMessage());
@@ -77,12 +79,16 @@ public class Ledger {
         return transactions;
     }
 
+    //prints all transactions in the ledger to the console
+
     public static void viewAllTransactions() {
         for (int i = loadLedger().size() - 1; i >= 0; i--) {
             String transaction = loadLedger().get(i).toString();
             System.out.println(transaction);
         }
     }
+
+    //reads the current ledger and stores it in a string
 
     public static String readExistingLedger() {
         StringBuilder existingLedger = new StringBuilder();
