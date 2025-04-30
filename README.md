@@ -6,7 +6,7 @@ For demonstration there is a file called transactions.csv that is formatted like
 
 date|time|description|vendor|amount  
 
-formats for each section are as follows:  
+Formats for each section are as follows:  
 
 date: yyyy:MM:dd  
 time: HH:mm:ss  
@@ -16,30 +16,38 @@ amount: amount for the transaction positive for deposits and negative(-) for pay
 
 ### running the program
 
-after the program starts you will see this screen:  
+After the program starts you will see this screen:  
 ![Home Screen](./AccountingLedger/images/home_screen.png)  
 
-which prompts the user to type in one of the available options:  
-if the user chooses add deposit or make payment they will be asked to give the details of their transaction.  
-if the user chooses ledger it will go to the ledger menu:  
+Which prompts the user to type in one of the available options:  
+(D) prompt user for the deposit information and save it to the collection  
+(P) prompt user for the debit information and save it to the collection  
+(L) display the Ledger menu  
+(X) Exit the application  
+
+Ledger Menu:  
 ![Ledger Menu](./AccountingLedger/images/ledger_screen.png)   
 
 
 
 
-the user once again has some options available.  
-All will print to console all transactions that are currently in the ledger
-Deposits will print to console all transactions that are deposits (positive)  
-Payments will print to console all transactions that are payments (negative)  
-Reports will take you to the reports menu
-Home returns you to the home screen
+the user once again has some options available:  
+(A) Print to console all transactions that are currently in the ledger  
+(D) print to console all transactions that are deposits (positive)  
+(P) print to console all transactions that are payments (negative)  
+(R) take you to the reports menu  
+(H) returns to the home screen  
 
 The reports menu:  
 ![Reports Menu](./AccountingLedger/images/reports_screen.png)  
 
-The reports menu has a few different report types the user can choose to view.  
-Month to date, previous month, year to date, previous year.  
-The search option allows the user to type in a search term and will display transactions that the vendor field contains the search term (if any)
+The reports menu has a few different report types the user can choose to view:  
+(1) Month to date  
+(2) Previous month  
+(3) Year to date  
+(4) Previous year  
+(5) allows the user to type in a search term and will display transactions that the vendor field contains the search term (if any)  
+(0) Returns to the previous screen
 
 Here is an example of what one of the report printouts looks like:  
 ![example report printout](./AccountingLedger/images/report_printout.png)  

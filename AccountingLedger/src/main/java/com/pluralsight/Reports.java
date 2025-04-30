@@ -13,10 +13,10 @@ public class Reports {
         while(keepReportsRunning) {
             int reportsScreenSelection = getReportsScreenSelection();
             switch (reportsScreenSelection) {
-                case 1 -> viewMonthReport(true); //month to date
-                case 2 -> viewMonthReport(false); //previous month
-                case 3 -> viewYearReport(true); //year to date
-                case 4 -> viewYearReport(false); //previous year
+                case 1 -> viewMonthReport(currentMonth, currentYear); //month to date
+                case 2 -> viewMonthReport(previousMonth(), previousMonthYear()); //previous month
+                case 3 -> viewYearReport(currentYear); //year to date
+                case 4 -> viewYearReport(currentYear - 1); //previous year
                 case 5 -> searchByVendor(); //search through records by vendor name
                 case 0 -> keepReportsRunning = false; //returns to ledger menu
                 default -> System.out.println("Please select a valid option.");
@@ -34,24 +34,16 @@ public class Reports {
         return 999;
     }
 
-    // view reports for one month
-    //either the current month (true) or the previous month (false)
+    // view reports for one month based on month and year values passed in
 
-    private static void viewMonthReport(boolean thisMonth) {
+    private static void viewMonthReport(int month, int year) {
         StringBuilder monthTransactions = new StringBuilder();
         for(int i = Main.transactionCollection.size() - 1; i >= 0; i--) {
             String[] splitDate = Main.transactionCollection.get(i).getDate().split("-");
-            int month = Integer.parseInt(splitDate[1]);
-            int year = Integer.parseInt(splitDate[0]);
-            if(thisMonth) {
-                if (month == currentMonth && year == currentYear) {
+            int transactionMonth = Integer.parseInt(splitDate[1]);
+            int transactionYear = Integer.parseInt(splitDate[0]);
+            if (transactionMonth == month && transactionYear == year) {
                     monthTransactions.append(Main.transactionCollection.get(i)).append("\n");
-                }
-            }
-            if(!thisMonth) {
-                if((month == currentMonth - 1 && year == currentYear) || (currentMonth == 1 && month == 12 && year == currentYear - 1)) {
-                    monthTransactions.append(Main.transactionCollection.get(i)).append("\n");
-                }
             }
         }
         if (monthTransactions.toString().isEmpty()) {
@@ -63,23 +55,15 @@ public class Reports {
         Utils.pauseReturn();
     }
 
-    //view transactions for one year
-    //either the current year (true) or the previous year (false)
+    //view transactions for one year based on year value passed in
 
-    private static void viewYearReport(boolean thisYear) {
+    private static void viewYearReport(int year) {
         StringBuilder yearTransactions = new StringBuilder();
         for(int i = Main.transactionCollection.size() - 1; i >= 0; i--) {
             String[] splitDate = Main.transactionCollection.get(i).getDate().split("-");
-            int year = Integer.parseInt(splitDate[0]);
-            if(thisYear) {
-                if (year == currentYear) {
-                    yearTransactions.append(Main.transactionCollection.get(i)).append("\n");
-                }
-            }
-            if(!thisYear) {
-                if(year == currentYear - 1) {
-                    yearTransactions.append(Main.transactionCollection.get(i)).append("\n");
-                }
+            int transactionYear = Integer.parseInt(splitDate[0]);
+            if (transactionYear == year) {
+                yearTransactions.append(Main.transactionCollection.get(i)).append("\n");
             }
         }
         if (yearTransactions.toString().isEmpty()) {
@@ -110,5 +94,30 @@ public class Reports {
             System.out.println("\n" + searchTransactions);
         }
         Utils.pauseReturn();
+    }
+
+    private static int previousMonth() {
+        int previousMonth = 0;
+        if (currentMonth > 1 && currentMonth <= 12) {
+            previousMonth = currentMonth - 1;
+        }
+        if (currentMonth == 1) {
+            previousMonth = 12;
+        }
+        else {
+            System.out.println("Month not in range.");
+        }
+        return previousMonth;
+    }
+
+    private static int previousMonthYear() {
+        int previousMonthYear = 0;
+        if (currentMonth > 1 && currentMonth <= 12) {
+            previousMonthYear = currentYear;
+        }
+        if (currentMonth == 1) {
+            previousMonthYear = currentYear - 1;
+        }
+        return previousMonthYear;
     }
 }
