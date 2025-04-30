@@ -1,7 +1,6 @@
 package com.pluralsight;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class Reports {
     private static final LocalDate date = LocalDate.now();
@@ -40,19 +39,18 @@ public class Reports {
 
     private static void viewMonthReport(boolean thisMonth) {
         StringBuilder monthTransactions = new StringBuilder();
-        ArrayList<Transaction> transaction = Ledger.loadLedger();
-        for(int i = Ledger.loadLedger().size() - 1; i >= 0; i--) {
-            String[] splitDate = transaction.get(i).getDate().split("-");
+        for(int i = Main.transactionCollection.size() - 1; i >= 0; i--) {
+            String[] splitDate = Main.transactionCollection.get(i).getDate().split("-");
             int month = Integer.parseInt(splitDate[1]);
             int year = Integer.parseInt(splitDate[0]);
             if(thisMonth) {
                 if (month == currentMonth && year == currentYear) {
-                    monthTransactions.append(transaction.get(i)).append("\n");
+                    monthTransactions.append(Main.transactionCollection.get(i)).append("\n");
                 }
             }
             if(!thisMonth) {
                 if((month == currentMonth - 1 && year == currentYear) || (currentMonth == 1 && month == 12 && year == currentYear - 1)) {
-                    monthTransactions.append(transaction.get(i)).append("\n");
+                    monthTransactions.append(Main.transactionCollection.get(i)).append("\n");
                 }
             }
         }
@@ -70,18 +68,17 @@ public class Reports {
 
     private static void viewYearReport(boolean thisYear) {
         StringBuilder yearTransactions = new StringBuilder();
-        ArrayList<Transaction> transaction = Ledger.loadLedger();
-        for(int i = Ledger.loadLedger().size() - 1; i >= 0; i--) {
-            String[] splitDate = transaction.get(i).getDate().split("-");
+        for(int i = Main.transactionCollection.size() - 1; i >= 0; i--) {
+            String[] splitDate = Main.transactionCollection.get(i).getDate().split("-");
             int year = Integer.parseInt(splitDate[0]);
             if(thisYear) {
                 if (year == currentYear) {
-                    yearTransactions.append(transaction.get(i)).append("\n");
+                    yearTransactions.append(Main.transactionCollection.get(i)).append("\n");
                 }
             }
             if(!thisYear) {
                 if(year == currentYear - 1) {
-                    yearTransactions.append(transaction.get(i)).append("\n");
+                    yearTransactions.append(Main.transactionCollection.get(i)).append("\n");
                 }
             }
         }
@@ -98,13 +95,12 @@ public class Reports {
 
     private static void searchByVendor() {
         StringBuilder searchTransactions = new StringBuilder();
-        ArrayList<Transaction> transaction = Ledger.loadLedger();
         String searchTerm = Utils.messageAndResponse("Search: ").trim().toLowerCase();
         String ledgerVendor;
-        for(int i = Ledger.loadLedger().size() - 1; i >= 0; i--) {
-            ledgerVendor = transaction.get(i).getVendor().toLowerCase();
+        for(int i = Main.transactionCollection.size() - 1; i >= 0; i--) {
+            ledgerVendor = Main.transactionCollection.get(i).getVendor().toLowerCase();
             if(ledgerVendor.contains(searchTerm)) {
-                searchTransactions.append(transaction.get(i)).append("\n");
+                searchTransactions.append(Main.transactionCollection.get(i)).append("\n");
             }
         }
         if (searchTransactions.toString().isEmpty()) {

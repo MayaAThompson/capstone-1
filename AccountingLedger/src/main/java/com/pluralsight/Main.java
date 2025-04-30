@@ -1,6 +1,10 @@
 package com.pluralsight;
 
+import java.util.ArrayList;
+
 public class Main {
+
+    public static ArrayList<Transaction> transactionCollection = Ledger.loadLedger();
 
     public static void main(String[] args) {
 
@@ -21,6 +25,7 @@ public class Main {
                 default -> System.out.println("Please select a valid option.");
             }
         }
+        Ledger.writeLedger();
     }
 
     private static char getHomeScreenSelection() {

@@ -1,8 +1,5 @@
 package com.pluralsight;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -27,29 +24,19 @@ public class Transaction {
     //once input is received the new transaction is tagged automatically with date and time and all transactions are written to the filePath
 
     public static void newTransaction(boolean isDeposit) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(Ledger.filePath))) {
-            String existingLedger = Ledger.readExistingLedger();
-            StringBuilder newCredit = new StringBuilder();
+
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-            newCredit.append(LocalDate.now()).append("|");
-            newCredit.append(LocalTime.now().format(formatter)).append("|");
-            newCredit.append(Utils.messageAndResponse("Transaction description: ").trim()).append("|");
-            newCredit.append(Utils.messageAndResponse("Vendor: ").trim()).append("|");
-
-            if(isDeposit) {
-                newCredit.append(Utils.messageAndResponse("Amount: $").trim());
-            }
-
+            String date = LocalDate.now().toString();
+            String time = LocalTime.now().format(formatter);
+            String description = Utils.messageAndResponse("Transaction description: ").trim();
+            String vendor = Utils.messageAndResponse("Vendor: ").trim();
+            double amount = Double.parseDouble(Utils.messageAndResponse("Amount: $"));
             if(!isDeposit) {
-                newCredit.append("-").append(Utils.messageAndResponse("Amount: $").trim());
+                amount *= (-1);
             }
-            writer.write(existingLedger);
-            writer.write(newCredit.toString());
-
-        } catch (IOException e) {
-            System.out.println("Something went wrong." + e.getMessage());
-        }
+            Transaction newTransaction = new Transaction(date, time, description, vendor, amount);
+            Main.transactionCollection.add(newTransaction);
     }
 
     //region getters

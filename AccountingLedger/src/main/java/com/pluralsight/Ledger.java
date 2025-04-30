@@ -1,9 +1,6 @@
 package com.pluralsight;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 public class Ledger {
@@ -40,17 +37,16 @@ public class Ledger {
 
     private static void viewPaymentsDeposits(boolean isPayment) {
         StringBuilder transactions = new StringBuilder();
-        ArrayList<Transaction> transaction = loadLedger();
-        for(int i = loadLedger().size() - 1; i >= 0; i--) {
-            double paymentDeposit = transaction.get(i).getAmount();
+        for(int i = Main.transactionCollection.size() - 1; i >= 0; i--) {
+            double paymentDeposit = Main.transactionCollection.get(i).getAmount();
             if(isPayment) {
                 if (paymentDeposit < 0) {
-                    transactions.append(transaction.get(i)).append("\n");
+                    transactions.append(Main.transactionCollection.get(i)).append("\n");
                 }
             }
             if(!isPayment) {
                 if(paymentDeposit > 0 ) {
-                    transactions.append(transaction.get(i)).append("\n");
+                    transactions.append(Main.transactionCollection.get(i)).append("\n");
                 }
             }
         }
@@ -89,29 +85,21 @@ public class Ledger {
 
     public static void viewAllTransactions() {
         System.out.println(); //only purpose is whitespace in CLI
-        for (int i = loadLedger().size() - 1; i >= 0; i--) {
-            String transactions = loadLedger().get(i).toString();
+        for (int i = Main.transactionCollection.size() - 1; i >= 0; i--) {
+            String transactions = Main.transactionCollection.get(i).toString();
             System.out.println(transactions);
         }
         Utils.pauseReturn();
     }
 
-    //reads the current ledger and stores it in a string
-
-    public static String readExistingLedger() {
-        StringBuilder existingLedger = new StringBuilder();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(filePath));
-            String input;
-            while ((input = reader.readLine()) != null) {
-                existingLedger.append(input).append("\n");
+    public static void writeLedger(){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(Ledger.filePath))) {
+            writer.write("date|time|description|vendor|amount\n");
+            for (Transaction transaction : Main.transactionCollection) {
+                writer.write(transaction.toString() + "\n");
             }
-
-        } catch (FileNotFoundException e) {
-        System.out.println("File not found. " + e.getMessage());
         } catch (IOException e) {
-        System.out.println("Failed to read the file. " + e.getMessage());
+            System.out.println("Something went wrong. " + e.getMessage());
         }
-        return existingLedger.toString();
     }
 }
