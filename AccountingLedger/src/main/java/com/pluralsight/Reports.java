@@ -14,7 +14,7 @@ public class Reports {
             int reportsScreenSelection = getReportsScreenSelection();
             switch (reportsScreenSelection) {
                 case 1 -> viewMonthReport(currentMonth, currentYear); //month to date
-                case 2 -> viewMonthReport(previousMonth(), previousMonthYear()); //previous month
+                case 2 -> viewMonthReport(previousMonth, previousMonthYear()); //previous month
                 case 3 -> viewYearReport(currentYear); //year to date
                 case 4 -> viewYearReport(currentYear - 1); //previous year
                 case 5 -> searchByVendor(); //search through records by vendor name
@@ -96,26 +96,14 @@ public class Reports {
         Utils.pauseReturn();
     }
 
-    private static int previousMonth() {
-        int previousMonth = 0;
-        if (currentMonth > 1 && currentMonth <= 12) {
-            previousMonth = currentMonth - 1;
-        }
-        if (currentMonth == 1) {
-            previousMonth = 12;
-        }
-        else {
-            System.out.println("Month not in range.");
-        }
-        return previousMonth;
-    }
+    private static int previousMonth = (currentMonth - 2) % 12 + 1;
 
     private static int previousMonthYear() {
         int previousMonthYear = 0;
-        if (currentMonth > 1 && currentMonth <= 12) {
+        if (previousMonth >= 1 && previousMonth < 12) {
             previousMonthYear = currentYear;
         }
-        if (currentMonth == 1) {
+        if (previousMonth == 12) {
             previousMonthYear = currentYear - 1;
         }
         return previousMonthYear;
