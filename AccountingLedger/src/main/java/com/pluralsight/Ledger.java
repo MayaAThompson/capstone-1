@@ -87,7 +87,7 @@ public class Ledger {
         System.out.println(); //only purpose is whitespace in CLI
         for (int i = Main.transactionCollection.size() - 1; i >= 0; i--) {
             String transactions = Main.transactionCollection.get(i).toString();
-            System.out.println(transactions);
+            System.out.println(transactions + "\n");
         }
         Utils.pauseReturn();
     }

@@ -47,16 +47,35 @@ Here is an example of what one of the report printouts looks like:
 Here is one piece of code in this project I'm proud of:
 
 ```java  
-public static void pauseReturn() {
-    System.out.print("Press Enter to Continue");
-    if (scanner.hasNextLine()) {
-        scanner.nextLine();
+public static void reportsMenu() {
+
+    boolean keepReportsRunning = true;
+    while(keepReportsRunning) {
+        int reportsScreenSelection = getReportsScreenSelection();
+        switch (reportsScreenSelection) {
+            case 1 -> viewMonthReport(true); //month to date
+            case 2 -> viewMonthReport(false); //previous month
+            case 3 -> viewYearReport(true); //year to date
+            case 4 -> viewYearReport(false); //previous year
+            case 5 -> searchByVendor(); //search through records by vendor name
+            case 0 -> keepReportsRunning = false; //returns to ledger menu
+            default -> System.out.println("Please select a valid option.");
+        }
     }
-    scanner.nextLine();
+}
+
+private static int getReportsScreenSelection() {
+    System.out.println("\n---Reports---\n1) Month to Date\n2) Previous Month\n3) Year to Date\n4) Previous Year\n5) Search by Vendor\n0) Back");
+    try {
+        return Integer.parseInt(Utils.messageAndResponse("Select: "));
+    } catch (NumberFormatException e) {
+        System.out.println("\nSomething went wrong! " + e.getMessage());
+    }
+    return 999;
 }
 ```
 
-This method is in Utils.java class  
-It is used in multiple places throughout the project.  
-
-when this method is called it will clear the buffer of any potential leftover line feeds then waits for the user to press enter to continue the program.
+These methods create the Reports menu  
+The switch statement handles the menu selection and is very clear/readable as to what the menu is doing  
+getReportScreenSelection prints out the menu to the console and takes the users input for their selection  
+All the menus in my program are built in a similar way. They print out, take the users input and hand it in a simple elegant way that also accounts for unexpected inputs.  
