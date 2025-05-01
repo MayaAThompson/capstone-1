@@ -52,6 +52,8 @@ The reports menu has a few different report types the user can choose to view:
 Here is an example of what one of the report printouts looks like:  
 ![example report printout](./AccountingLedger/images/report_printout.png)  
 
+## Code Examples
+
 Here is one piece of code in this project I'm proud of:
 
 ```java  
@@ -87,3 +89,24 @@ These methods create the Reports menu
 The switch statement handles the menu selection and is very clear/readable as to what the menu is doing  
 getReportScreenSelection prints out the menu to the console and takes the users input for their selection  
 All the menus in my program are built in a similar way. They print out, take the users input and hand it in a simple elegant way that also accounts for unexpected inputs.  
+
+previousMonth calculation explanation:  
+
+```java
+private static final int previousMonth = (currentMonth - 2) % 12 + 1;
+```
+
+When taking the modulo of 2 numbers (a mod n) the remainder (r) will always be from 0 to n-1 where the difference of the 2 numbers is divisible my n.  
+
+This is a bit easier to understand when referencing a number line.  
+
+![Number Line](./AccountingLedger/images/number_line.png)
+
+Every possible remainder for a mod 12 will be a number on this number line for positive integers you count up until you get to 11 once you count up to the next integer the number is divisible by 12 so the remainder is 0, and we start back at the beginning of the line. the same applies to negative numbers, but you move along the line in the negative direction, opposite of the positive direction. so for example: -3%12=9.  
+
+In order to always find what the previous month is we have to do a little additional calculation. if we wrote this as:  
+```java
+int previousMonth = (currentMonth - 1) % 12;
+```
+It would work for most months but for January (1) our result ends up being 0. since we want our int assignment for previous month to always be a number between 1 and 12 we need to apply an offset of -1 inside the parenthesis and add it back at the end so our result is never 0 and instead always between 1 and 12.
+

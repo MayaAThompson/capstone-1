@@ -6,6 +6,9 @@ public class Reports {
     private static final LocalDate date = LocalDate.now();
     private static final int currentYear = date.getYear();
     private static final int currentMonth = date.getMonthValue();
+    private static final int previousMonth = (currentMonth - 2) % 12 + 1;
+
+    //Reports menu option operation and loop
 
     public static void reportsMenu() {
 
@@ -24,6 +27,8 @@ public class Reports {
         }
     }
 
+    //Reports menu printout and option selection
+
     private static int getReportsScreenSelection() {
         System.out.println("\n---Reports---\n1) Month to Date\n2) Previous Month\n3) Year to Date\n4) Previous Year\n5) Search by Vendor\n0) Back");
         try {
@@ -34,7 +39,7 @@ public class Reports {
         return 999;
     }
 
-    // view reports for one month based on month and year values passed in
+    // view transactions for one month based on month and year values passed in
 
     private static void viewMonthReport(int month, int year) {
         StringBuilder monthTransactions = new StringBuilder();
@@ -96,7 +101,7 @@ public class Reports {
         Utils.pauseReturn();
     }
 
-    private static int previousMonth = (currentMonth - 2) % 12 + 1;
+    //determines what the year should be based on previousMonth
 
     private static int previousMonthYear() {
         int previousMonthYear = 0;

@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // Main menu
+        // Main menu option operation and loop
 
         boolean keepMainMenuRunning = true;
         while (keepMainMenuRunning) {
@@ -23,6 +23,8 @@ public class Main {
         }
         Ledger.writeLedger();
     }
+
+    // Main menu printout and option selection
 
     private static char getHomeScreenSelection() {
         System.out.println("\n---HOME---\nD) Add Deposit\nP) Make Payment (Debit)\nL) Ledger\nX) Exit");

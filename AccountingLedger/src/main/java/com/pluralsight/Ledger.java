@@ -11,6 +11,8 @@ public class Ledger {
     static String filePath = "src/main/resources/transactions.csv";
     private static String fileHeader;
 
+    //Ledger menu option operation and loop
+
     public static void ledgerMenu() {
 
         boolean keepLedgerRunning = true;
@@ -27,7 +29,7 @@ public class Ledger {
         }
     }
 
-    //loads the current contents of filePath to an ArrayList<>
+    //loads the current contents of filePath to an ArrayList<> transactionCollection
 
     public static ArrayList<Transaction> loadLedger() {
         ArrayList<Transaction> transactions = new ArrayList<>();
@@ -47,6 +49,7 @@ public class Ledger {
         return transactions;
     }
 
+    //writes the contents of transactionCollection to filePath
     public static void writeLedger(){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(Ledger.filePath))) {
             writer.write(fileHeader + "\n");
@@ -57,6 +60,8 @@ public class Ledger {
             System.out.println("Something went wrong. " + e.getMessage());
         }
     }
+
+    //add a new transaction to transactionCollection
 
     public static void addTransaction(boolean isDeposit) {
 
@@ -85,6 +90,8 @@ public class Ledger {
         Utils.pauseReturn();
     }
 
+    //Ledger menu printout and option selection
+
     private static char getLedgerScreenSelection() {
         System.out.println("\n---Ledger---\nA) All\nD) Deposits\nP) Payments\nR) Reports\nH) Home");
         try {
@@ -94,6 +101,8 @@ public class Ledger {
         }
         return ' ';
     }
+
+    //View transactions: all deposits (false) or all payments (true)
 
     private static void viewPaymentsDeposits(boolean isPayment) {
         StringBuilder transactions = new StringBuilder();
